@@ -12,6 +12,7 @@ variables:
   REGISTRY_URL: "${IMAGE_REPOSITORY}"
 
 stages:
+  - read-secret
   - docker-build
 
 read_secret:
