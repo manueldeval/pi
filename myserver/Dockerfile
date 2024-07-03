@@ -4,5 +4,7 @@ COPY . .
 RUN cargo install --path .
 
 FROM debian:bullseye-slim
+RUN apt update
+RUN apt install -y libc6
 COPY --from=builder /usr/local/cargo/bin/myserver /usr/local/bin/myserver
 CMD ["myserver"]
