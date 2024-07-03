@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: harbor.apps.c6.numerique-interieur.com/mtfp-firstproject/myserver
+  pullPolicy: Always
+  tag: "1.0"
+
+imagePullSecrets: 
+  - name: "registry-pull-secret"
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  secret:
+    enabled: true
+  host: rustpowa.apps.dso-formation.hp.numerique-interieur.com
+
+resources: 
+  limits:
+    memory: "100Mi"
+    cpu: "500m"  
+  requests:
+    memory: "50Mi"
+    cpu: "100m"  
