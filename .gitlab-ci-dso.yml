@@ -14,6 +14,10 @@ variables:
 stages:
   - docker-build
 
+read_secret:
+  stage: read-secret
+  extends:
+    - .vault:read_secret
 
 docker-build:
   variables:
