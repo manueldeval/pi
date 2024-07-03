@@ -24,6 +24,15 @@ docker-build:
   variables:
     WORKING_DIR: "./myserver/"
     IMAGE_NAME: myserver
+    DOCKERFILE: Dockerfile
+    TAG: "1.0"
   stage: docker-build
-  extends:
-    - .kaniko:simple-build-push
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - if [ ! -z $CA_BUNDLE ]; then cat $CA_BUNDLE >> /kaniko/ssl/certs/additional-ca-cert-bundle.crt; fi
+    - mkdir -p /kaniko/.docker
+    - echo "$DOCKER_AUTH" > /kaniko/.docker/config.json
+    - /kaniko/executor --build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy --build-arg no_proxy=$no_proxy --context="$CI_PROJECT_DIR/myserver/" --dockerfile="$CI_PROJECT_DIR/$WORKING_DIR/$DOCKERFILE" --registry-mirror=nexus-docker-proxy.apps.c6.numerique-interieur.com --destination $REGISTRY_URL/$IMAGE_NAME:$TAG
+
