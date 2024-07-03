@@ -1,0 +1,15 @@
+include:
+  - project: $CATALOG_PATH
+    file:
+      - vault-ci.yml
+      - kaniko-ci.yml
+      - java-mvn.yml
+    ref: main
+
+docker-build:
+  variables:
+    WORKING_DIR: "./myserver/"
+    IMAGE_NAME: myserver
+  stage: docker-build
+  extends:
+    - .kaniko:simple-build-push
