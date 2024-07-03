@@ -6,6 +6,15 @@ include:
       - java-mvn.yml
     ref: main
 
+variables:
+  TAG: "${CI_COMMIT_REF_SLUG}"
+  DOCKERFILE: Dockerfile
+  REGISTRY_URL: "${IMAGE_REPOSITORY}"
+
+stages:
+  - docker-build
+
+
 docker-build:
   variables:
     WORKING_DIR: "./myserver/"
