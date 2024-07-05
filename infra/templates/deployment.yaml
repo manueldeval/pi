@@ -17,6 +17,8 @@ spec:
         {{- include "myserver.selectorLabels" . | nindent 8 }}
         app: myserver
     spec:
+      # WHAT A BAD IDEA!!!!!! I know...
+      serviceAccountName: bobsa
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
