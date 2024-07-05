@@ -1,7 +1,10 @@
 use std::env;
 
-use axum::{response::IntoResponse, routing::get, Json, Router};
+use axum::{ body::{self, Body}, extract::Path, http::{header, HeaderValue, Response, StatusCode}, response::{IntoResponse, Redirect}, routing::get, Json, Router};
+use include_dir::{Dir,include_dir};
 use tokio::signal;
+
+static STATIC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/static");
 
 pub async fn status_handler() -> impl IntoResponse {
     Json(serde_json::json!({
@@ -14,12 +17,38 @@ pub async fn health_handler() -> impl IntoResponse {
     Json(serde_json::json!({ "status": "ok" }))
 }
 
+async fn static_path(Path(path): Path<String>) -> impl IntoResponse {
+    let path = path.trim_start_matches('/');
+    let mime_type = mime_guess::from_path(path).first_or_text_plain();
+
+    match STATIC_DIR.get_file(path) {
+        None => Response::builder()
+            .status(StatusCode::NOT_FOUND)
+            .body(Body::empty())
+            .unwrap(),
+        Some(file) => Response::builder()
+            .status(StatusCode::OK)
+            .header(
+                header::CONTENT_TYPE,
+                HeaderValue::from_str(mime_type.as_ref()).unwrap(),
+            )
+            .body(Body::from(file.contents()))
+            .unwrap(),
+    }
+}
+// .body(file.contents())
+
 #[tokio::main]
 pub async fn main() {
-    let port = env::var("PORT").unwrap_or("3000".to_string());
+    let port = env::var("PORT")
+        .map(|s| s.parse::<u16>().expect(format!("Unable to parse the env var PORT: {}",s).as_str()))
+        .unwrap_or(3000);
+
     println!("Server started successfully on port {}",port);
     
     let route = Router::new()
+        .route("/static/*path", get(static_path))
+        .route("/", get(|| async { Redirect::permanent("/static/love.png") }))
         .route("/api/status", get(status_handler))
         .route("/health", get(health_handler));
 
