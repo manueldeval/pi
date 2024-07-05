@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bobrb
+subjects:
+- kind: ServiceAccount
+  name: bobsa
+roleRef:
+  kind: Role 
+  name: bob-is-admin
+  apiGroup: rbac.authorization.k8s.io
