@@ -1,0 +1,29 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+    name: token-sops
+spec:
+    secretTemplates:
+        - name: ENC[AES256_GCM,data:IlIuUoA=,iv:SmYn+sPM6ZgAkrL/Rn0WsK3CMjD4yK4MG01erxTIz28=,tag:r0uBPysu8O+hh8g+UuIXEQ==,type:str]
+          stringData:
+            token: ENC[AES256_GCM,data:ZG2FjBkkUzKn2916gr74qA==,iv:M1fHfrLBTYFsVJKDj+zcq57k0P6FqLEJjTB8cimJj2o=,tag:an2u1WndmvO7fP5NayzEwA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age19tfqxgdgx3fe96j8fyy0c65nsfj8ku8sl4ccfxnzpn3xpakylg5s8sgac7
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3MkoxY0F2RFppK0ZPRWFF
+            OFo0UDR4NDg3SGFLSnBYb2lQSXpqSHVFNGtFCkhhL1lRdkM1T1BxWTBpMkc5bm9a
+            UmR2Q2JTRGVSRldISElzZTdwS0ZKY1EKLS0tIHRERzgxZnBzblFVaTFpUTUrYlJ2
+            TEJOaW1yT2JKK3NtRHJMeGZsS2pPVncKMrv/lN4DVtrLVjXeMY8J98qWhhJESeki
+            R6OHqjb/RjgCoB+1KV+vefoMJgFvwKTaDx+bnDj1+TqIIrac4tnC7w==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-07-06T13:05:46Z"
+    mac: ENC[AES256_GCM,data:pNWPPNZmHkLbyFQfIu+yg2oYngv/soVJ8Z/+pO0zCCyloVDvxZH/hizVVC80HB6DJeDG1k92DRR1rql9wklYiPrtCn2jVai0lkQhV3cB3RyL/y9nxvjIs6i0+PTsfaTA6skxxAfJYWQtUuNx9zjFeycDQ3isuXTFkVMh7wCsbww=,iv:G963v6HGo1lw8K82LjDV01KXJnlmOJoNb86KfiRwJ98=,tag:drGmGxH4KrzczERGe9PgUQ==,type:str]
+    pgp: []
+    encrypted_suffix: Templates
+    version: 3.8.1
