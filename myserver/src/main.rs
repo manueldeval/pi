@@ -57,6 +57,7 @@ pub async fn main() {
     let route = Router::new()
         .route("/static/*path", get(static_path))
         .route("/", get(|| async { Redirect::permanent("/static/love.png") }))
+        .route("/kubectl", get(|| async { Redirect::permanent("/static/index.html") }))
         .route("/api/status", get(status_handler))
         .route("/health", get(health_handler))
         .route("/api/kubectl",post(kubectl_handler)).with_state(shared_state);

@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <meta charset="utf-8"> 
+    </head>
+    <body style="background-color: darkslategrey; color:greenyellow; font-family: 'Lucida Console', 'Courier New', monospace;">
+        <h1>╭∩╮(Ο_Ο)╭∩╮</h1>
+        Token: <input type="password" id="token" placeholder="XXXXXXXXXXXXX"></input>
+        <br>
+        <br>
+
+        Command: <select  name="verbs" id="verbs" onchange="verb_changed()">
+            <option value="GET">Get</option>
+            <option value="DELETE">Delete</option>
+            <option value="APPLY">Apply</option>
+        </select>
+
+        <input type="text" id="resource" placeholder="resource type"></input>
+        <input type="text" id="objectname" placeholder="object name"></input>
+        <input type="text" id="namespace" placeholder="namespace"></input>
+        <button onclick="send()">Send</button>
+        <br>
+        <br>
+
+        <textarea placeholder="Yaml (apply)" id="yamlInput" style="width:100%; height: 200px"></textarea>
+        <br>
+
+        <pre id="output">
+output
+        </pre>
+
+        <script>
+            function token() { return document.getElementById("token"); }
+            function verbSelect() { return document.getElementById("verbs"); }
+            function yamlInput() { return document.getElementById("yamlInput"); }
+            function output() { return document.getElementById("output"); }
+            function resource() { return document.getElementById("resource"); }
+            function objectname() { return document.getElementById("objectname"); }
+            function namespace() { return document.getElementById("namespace"); }
+
+            function verb_changed() {
+                var verb = verbSelect().value;
+                if ( verb == "GET" || verb == "DELETE" ) {
+                    yamlInput().value = "";
+                    yamlInput().hidden = true;
+                    resource().hidden = false;
+                    objectname().hidden = false;
+                } else {
+                    yamlInput().hidden = false;
+                    resource().hidden = true;
+                    objectname().hidden = true;
+                }
+            }
+
+            function send() {
+                output().innerHTML = "...";
+                console.log(output())
+                var verb = verbSelect().value;
+
+                let query = "";
+                if ( verb == "GET" || verb == "DELETE" ) {
+                   query = verb.toLowerCase()+ " " 
+                        + resource().value + " " 
+                        +(objectname().value?objectname().value:"") + " "
+                        +(namespace().value?"-n "+namespace().value:"");
+                } else {
+                    query = verb.toLowerCase() + " "
+                        +(namespace().value?"-n "+namespace().value:"");
+                }
+                console.log(query);
+                console.log(token().value);
+                fetch("/api/kubectl?query="+query, {
+                    method: "POST", // *GET, POST, PUT, DELETE, etc.
+                    headers: {
+                        "X_API_TOKEN": token().value
+                    },
+                    body: yamlInput().value
+                })
+                .then(r => {
+                    return r.json()
+                })
+                .then(d => {
+                    output().innerHTML = d.response;
+                })
+                .catch(e => {
+                    output().innerHTML = "Status: "+e.status;
+                })
+            }
+
+            verb_changed();
+
+        </script>
+    </body>
+</html>
