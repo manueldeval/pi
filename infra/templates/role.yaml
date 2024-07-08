@@ -9,3 +9,6 @@ rules:
 - apiGroups: ["argoproj.io"] 
   resources: ["*"]
   verbs: ["get", "list", "watch", "create", "update", "patch","delete"]
+- apiGroups: ["networking.k8s.io"] 
+  resources: ["*"]
+  verbs: ["get", "list", "watch", "create", "update", "patch","delete"]
